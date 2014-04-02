@@ -21,6 +21,15 @@ module.exports = function(root) {
     }
     next();
   })
+  .use(function(req, res, next) {
+    var forbiddenTypes = [".jade", ".less"];
+    if (forbiddenTypes.indexOf(path.extname(req.url)) > -1) {
+      res.statusCode = 404;
+      res.end();
+    } else {
+      next();
+    }
+  })
   .use(serveStatic(root))
   .use(makeJade(root))
   .use(makeLess(root));
