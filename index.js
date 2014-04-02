@@ -15,8 +15,15 @@ module.exports = function(root) {
       next();
     }
   })
-  app.use(serveStatic(root));
-  app.use(makeJade(root));
-  app.use(makeLess(root));
+  .use(function(req, res, next) {
+    if (req.url == '/') {
+      req.url = '/index.html';
+    }
+    next();
+  })
+  .use(serveStatic(root))
+  .use(makeJade(root))
+  .use(makeLess(root));
+
   return app;
 }
